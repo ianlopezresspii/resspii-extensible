@@ -2,28 +2,18 @@ import asyncio
 import websockets
 import json
 
-TIKFINITY_URL = "ws://localhost:21213/"
-
 async def main():
-    print("🔌 Conectando con TikFinity...")
+    print("Conectando con TikFinity...")
 
-    async with websockets.connect(TIKFINITY_URL) as ws:
-        print("✅ CONECTADO A TIKFINITY")
-        print("🎁 Esperando regalos...\n")
+    async with websockets.connect("ws://localhost:21213/") as ws:
+        print("CONECTADO A TIKFINITY")
+        print("Esperando regalos...")
 
         async for message in ws:
-            try:
-                event = json.loads(message)
+            event = json.loads(message)
 
-                if event.get("event") == "gift":
-                    data = event.get("data", {})
+            if event.get("event") == "gift":
+                print("REGALO RECIBIDO:")
+                print(event["data"])
 
-                    print("🎁 REGALO RECIBIDO")
-                    print(json.dumps(data, indent=2, ensure_ascii=False))
-                    print()
-
-            except Exception as e:
-                print("Error:", e)
-
-if __name__ == "__main__":
-    asyncio.run(main())
+asyncio.run(main())
